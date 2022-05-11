@@ -1,0 +1,144 @@
+module reconcile-keep {
+
+  namespace "http://roque.com/reconcile-keep";
+  prefix reconcile-keep;
+  yang-version 1.1;
+
+  import ietf-inet-types {
+    prefix inet;
+  }
+  import tailf-common {
+    prefix tailf;
+  }
+  import tailf-ncs {
+    prefix ncs;
+  }
+
+  description
+    "Example action for doing service re-deploy with reduced inputs options";
+
+  revision 2016-01-01 {
+    description
+      "Initial revision.";
+  }
+
+  grouping grouping-reconcile-keep {
+    action reconcile-keep {
+      tailf:actionpoint reconcile-keep-action;
+      input {
+        leaf dry-run {
+          type empty;
+        }
+        leaf no-networking {
+          type empty;
+        }
+      }
+      output {
+        choice outformat {
+          case case-xml {
+            uses ncs:dry-run-xml;
+          }
+          case case-cli {
+            uses ncs:dry-run-cli;
+          }
+          case case-cli-c {
+            uses ncs:dry-run-cli-c;
+          }
+          case case-native {
+            uses ncs:dry-run-native;
+          }
+        }
+        uses ncs:ncs-commit-result;
+      }
+    }
+    action reconcile-keep-full {
+      tailf:actionpoint reconcile-keep-action-full;
+      input {
+        container dry-run {
+          presence "";
+          leaf outformat {
+            type ncs:outformat3;
+          }
+        }
+        uses ncs:ncs-commit-params;
+        uses ncs:service-depth {
+          refine "depth/deep" {
+            description "Recursively 're-deploy' stacked services";
+          }
+          refine "depth/shallow" {
+            description "Only 're-deploy' the topmost service";
+          }
+        }
+        container reconcile {
+          description
+            "Reconcile the service data. All data which existed before
+             the service was created will now be owned by the service.
+             The reference count will indicate how many services control
+             the data. When the service is removed that data will also be
+             removed. In technical terms the reference count will be
+             decreased by one for everything which existed prior to the
+             service.
+
+             If manually configured data exists below in the configuration
+             tree that data is kept unless the option
+             'discard-non-service-config' is used.";
+          presence "";
+          choice c-non-service-config {
+            leaf keep-non-service-config {
+              type empty;
+            }
+            // I am not allowing discard option
+            //leaf discard-non-service-config {
+            //  type empty;
+            //}
+            default keep-non-service-config;
+          }
+        }
+      }
+      output {
+        choice outformat {
+          case case-xml {
+            uses ncs:dry-run-xml;
+          }
+          case case-cli {
+            uses ncs:dry-run-cli;
+          }
+          case case-cli-c {
+            uses ncs:dry-run-cli-c;
+          }
+          case case-native {
+            uses ncs:dry-run-native;
+          }
+        }
+        uses ncs:ncs-commit-result;
+      }
+    }
+  }
+
+  list reconcile-keep-service {
+    description "This is an RFS skeleton service";
+
+    key name;
+    leaf name {
+      tailf:info "Unique service id";
+      tailf:cli-allow-range;
+      type string;
+    }
+
+    uses ncs:service-data;
+    ncs:servicepoint reconcile-keep-servicepoint;
+    uses reconcile-keep:grouping-reconcile-keep;
+
+    // may replace this with other ways of refering to the devices.
+    leaf-list device {
+      type leafref {
+        path "/ncs:devices/ncs:device/ncs:name";
+      }
+    }
+
+    // replace with your own stuff here
+    leaf dummy {
+      type inet:ipv4-address;
+    }
+  }
+}
