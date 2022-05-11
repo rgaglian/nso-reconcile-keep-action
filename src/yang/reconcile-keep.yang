@@ -115,6 +115,7 @@ module reconcile-keep {
     }
   }
 
+
   list reconcile-keep-service {
     description "This is an RFS skeleton service";
 
@@ -141,4 +142,10 @@ module reconcile-keep {
       type inet:ipv4-address;
     }
   }
+
+//  deviation /reconcile-keep:reconcile-keep-service/ncs:re-deploy/ncs:input/ncs:reconcile/ncs:discard-non-service-config {
+//    deviate not-supported;
+//  }
+
 }
+

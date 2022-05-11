@@ -12,26 +12,34 @@ class ReconcileAction(Action):
     def cb_action(self, uinfo, name, kp, input, output, trans):
         self.log.info('action name: ', name)
         self.log.info(f'kp:{kp}')
-        root = ncs.maagic.get_root(trans) # get maagic object
-        service = ncs.maagic.cd(root,kp)  # move to service
-        redeploy_inputs = service.re_deploy.get_input()
-        redeploy_inputs.reconcile.create() # manually set inputs
-        if input.dry_run:
-            redeploy_inputs.dry_run.create()
-        if input.no_networking:
-            redeploy_inputs.no_networking.create()
-        redeploy_outputs = service.re_deploy(redeploy_inputs)
-        output=redeploy_outputs
+        with ncs.maapi.Maapi() as m:
+            with ncs.maapi.Session(m,'something', 'system'):
+                with m.start_write_trans() as t_write:
+                    root = ncs.maagic.get_root(t_write) # get maagic object
+                    service = ncs.maagic.cd(root,kp)  # move to service
+                    redeploy_inputs = service.re_deploy.get_input()
+                    redeploy_inputs.reconcile.create() # manually set inputs
+                    if input.dry_run:
+                        redeploy_inputs.dry_run.create()
+                    if input.no_networking:
+                        redeploy_inputs.no_networking.create()
+                    redeploy_outputs = service.re_deploy(redeploy_inputs)
+                    self.log.info(f'output: {str(redeploy_outputs)}')
+                    output=redeploy_outputs
 
 class ReconcileFullAction(Action):
     @Action.action
     def cb_action(self, uinfo, name, kp, input, output, trans):
         self.log.info('action name: ', name)
         self.log.info(f'kp:{kp}')
-        root = ncs.maagic.get_root(trans)
-        service = ncs.maagic.cd(root,kp)
-        output=service.re_deploy(input) # use same inputs as they have been sanitized in YANG file
-
+        with ncs.maapi.Maapi() as m:
+            with ncs.maapi.Session(m,'admin', 'system'):
+                with m.start_write_trans() as t_write:
+                    root = ncs.maagic.get_root(t_write)
+                    service = ncs.maagic.cd(root,kp)
+                    redeploy_outputs=service.re_deploy(input) # use same inputs as they have been sanitized in YANG file
+                    self.log.info(f'output: {str(redeploy_outputs)}')
+                    output=redeploy_outputs
 # ------------------------
 # SERVICE CALLBACK EXAMPLE
 # ------------------------
