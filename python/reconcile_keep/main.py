@@ -13,7 +13,7 @@ class ReconcileAction(Action):
         self.log.info('action name: ', name)
         self.log.info(f'kp:{kp}')
         with ncs.maapi.Maapi() as m:
-            with ncs.maapi.Session(m,'something', 'system'):
+            with ncs.maapi.Session(m,'admin', 'system'):
                 with m.start_write_trans() as t_write:
                     root = ncs.maagic.get_root(t_write) # get maagic object
                     service = ncs.maagic.cd(root,kp)  # move to service
