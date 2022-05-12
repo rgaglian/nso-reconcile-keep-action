@@ -51,6 +51,7 @@ module reconcile-keep {
         uses ncs:ncs-commit-result;
       }
     }
+
     action reconcile-keep-full {
       tailf:actionpoint reconcile-keep-action-full;
       input {
@@ -142,10 +143,8 @@ module reconcile-keep {
       type inet:ipv4-address;
     }
   }
-
-//  deviation /reconcile-keep:reconcile-keep-service/ncs:re-deploy/ncs:input/ncs:reconcile/ncs:discard-non-service-config {
-//    deviate not-supported;
-//  }
-
+  deviation /reconcile-keep:reconcile-keep-service/reconcile-keep:re-deploy/reconcile-keep:input/reconcile-keep:reconcile/reconcile-keep:c-non-service-config/reconcile-keep:discard-non-service-config {
+    deviate not-supported;
+  }
 }
 
