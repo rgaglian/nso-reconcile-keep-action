@@ -2,6 +2,7 @@
 import ncs
 from ncs.application import Service
 from ncs.dp import Action
+import _ncs
 
 
 # ---------------
@@ -21,11 +22,15 @@ class ReconcileAction(Action):
                     redeploy_inputs.reconcile.create() # manually set inputs
                     if input.dry_run:
                         redeploy_inputs.dry_run.create()
+
+                        redeploy_inputs.dry_run.outformat="native"
                     if input.no_networking:
                         redeploy_inputs.no_networking.create()
                     redeploy_outputs = service.re_deploy(redeploy_inputs)
-                    self.log.info(f'output: {str(redeploy_outputs)}')
-                    output=redeploy_outputs
+                    self.log.debug(f'output: {str(redeploy_outputs)}')
+                    tag_output = redeploy_outputs._tagvalues()
+                    self.log.debug(f'output: {str(tag_output)}')
+                    output._from_tagvalues(tag_output)
 
 class ReconcileFullAction(Action):
     @Action.action
@@ -39,7 +44,9 @@ class ReconcileFullAction(Action):
                     service = ncs.maagic.cd(root,kp)
                     redeploy_outputs=service.re_deploy(input) # use same inputs as they have been sanitized in YANG file
                     self.log.info(f'output: {str(redeploy_outputs)}')
-                    output=redeploy_outputs
+                    tag_output = redeploy_outputs._tagvalues()
+                    self.log.debug(f'output: {str(tag_output)}')
+                    output._from_tagvalues(tag_output)
 # ------------------------
 # SERVICE CALLBACK EXAMPLE
 # ------------------------
