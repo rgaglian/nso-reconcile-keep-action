@@ -48,6 +48,8 @@ This was implemented in the action reconcile-keep-full and the python class Reco
 
 In this case, we do not use the input parameters from the default re-deploy aciton but we manually created what we believe are needed for our operators, you can follow a different logic that the original NSO design and even a different output format. In my case, I followed the same output schema.
 
+This was implemented in the action reconcile-keep and the python class ReconcileAction.
+
 In both Solutions 2 and 3, we will use NACM rules to set the previledges that some users have the right the use it.
 
 ## Testing:
