@@ -65,7 +65,7 @@ Here is how it works:
 
 1- clone this repository to a working environment, for example the "simple-mpls-vpn" example.
 2- compile the package: % make -C packages/reconcile-keep/src clean all
-3- perform package re-deploy
+3- perform package reload
 4- Add NACM rule to deny re-deploy and permit the new actions to the user oper:
 ```
 set nacm rule-list oper group [ oper ]
