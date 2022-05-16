@@ -15,7 +15,7 @@ class ReconcileAction(Action):
         self.log.info(f'kp:{kp}')
         with ncs.maapi.Maapi() as m:
             with ncs.maapi.Session(m,'admin', 'system'):
-                with m.start_write_trans() as t_write:
+                with m.start_read_trans() as t_write:
                     root = ncs.maagic.get_root(t_write) # get maagic object
                     service = ncs.maagic.cd(root,kp)  # move to service
                     redeploy_inputs = service.re_deploy.get_input()
@@ -39,7 +39,7 @@ class ReconcileFullAction(Action):
         self.log.info(f'kp:{kp}')
         with ncs.maapi.Maapi() as m:
             with ncs.maapi.Session(m,'admin', 'system'):
-                with m.start_write_trans() as t_write:
+                with m.start_read_trans() as t_write:
                     root = ncs.maagic.get_root(t_write)
                     service = ncs.maagic.cd(root,kp)
                     redeploy_outputs=service.re_deploy(input) # use same inputs as they have been sanitized in YANG file

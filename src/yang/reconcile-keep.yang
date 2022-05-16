@@ -118,7 +118,7 @@ module reconcile-keep {
 
 
   list reconcile-keep-service {
-    description "This is an RFS skeleton service";
+    description "Example service to show reconciliation manipulation";
 
     key name;
     leaf name {

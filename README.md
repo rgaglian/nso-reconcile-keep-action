@@ -52,6 +52,8 @@ This was implemented in the action reconcile-keep and the python class Reconcile
 
 In both Solutions 2 and 3, we will use NACM rules to set the previledges that some users have the right the use it.
 
+Warning: NACM rules do not act on IPC access via the "ncs_cli" command, you need to login via APIs: SSH, WebUI, NETCONF, RESTCONF or JSON-RPC.
+
 ## Testing:
 
 Here is how it works:
