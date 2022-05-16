@@ -1,6 +1,9 @@
 # NSO Reconcile Keep Action
 
-Tested with NSO 5.8
+Tested with:
+- NSO 5.8
+- Python 3.9.12
+- Java 11.0.15
 
 This is a package that I created to show how we can create actions that limit NSO default service actions and expose them to some users.
 

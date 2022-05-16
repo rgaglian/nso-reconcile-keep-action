@@ -2,8 +2,6 @@
 import ncs
 from ncs.application import Service
 from ncs.dp import Action
-import _ncs
-
 
 # ---------------
 # ACTIONS EXAMPLE
