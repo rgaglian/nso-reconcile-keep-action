@@ -8,6 +8,8 @@ In this case, we want to expose "service re-deploy reconcile" but not given the 
 
 I am showing three different ways to achieve the same objective. I am only committing one package that could be used for other service packages.
 
+Acknowledge: Nabil Charaf for his comments.
+
 ## Solution 1: Deviation.
 
 In YANG, you can deviate action inputs. What you need to do is to add in your service YANG file or in a different module that you can call service-deviations.yang a deviation statement.
