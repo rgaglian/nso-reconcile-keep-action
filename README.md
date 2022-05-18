@@ -63,19 +63,19 @@ Warning: NACM rules do not act on IPC access via the "ncs_cli" command, you need
 
 Here is how it works:
 
-1- clone this repository to a working environment, for example the "simple-mpls-vpn" example.
-2- compile the package: % make -C packages/reconcile-keep/src clean all
-3- perform package reload
-4- Add NACM rule to deny re-deploy and permit the new actions to the user oper:
+1) clone this repository to a working environment, for example the "simple-mpls-vpn" example.
+2) compile the package: % make -C packages/reconcile-keep/src clean all
+3) perform package reload
+4) Add NACM rule to deny re-deploy and permit the new actions to the user oper:
 ```
 set nacm rule-list oper group [ oper ]
 set nacm rule-list oper rule rule_reconcile path /l3vpn:vpn/l3vpn:l3vpn/reconcile-keep action permit
 set nacm rule-list oper rule rule_redeploy path /l3vpn:vpn/l3vpn:l3vpn/re-deploy action deny
 set nacm rule-list oper rule rule_reconcile_full path /l3vpn:vpn/l3vpn:l3vpn/reconcile-keep-full action permit
 ```
-5- login as "oper"
+5) login as "oper"
   Note: You need to do it via SSH or WebUI
-6- try to execute the commands:
+6) try to execute the commands:
 ```
 oper@ncs> request vpn l3vpn test_tel
 Possible completions:
@@ -96,7 +96,7 @@ So, there are two options:
   reconcile-keep      - In this case the number of options were limited
   reconcile-keep-full - This is basically a copy of re-deploy but without the "bad input"
 
-7- Test reconcile-keep which offers you only the inputs you hand-written:
+7) Test reconcile-keep which offers you only the inputs you hand-written:
 
 ```
 admin@ncs% request vpn l3vpn test_tel reconcile-keep ?
@@ -104,7 +104,7 @@ Possible completions:
   dry-run  no-networking
 ```
 
-8- Test reconcile-keep-full where all re-deploy options are available but the one you removed:
+8) Test reconcile-keep-full where all re-deploy options are available but the one you removed:
 ```
 admin@ncs% request vpn l3vpn test_tel reconcile-keep-full reconcile {
 Possible completions:
@@ -162,6 +162,6 @@ YANGPATH = --yangpath ./yang --yangpath ../../reconcile-keep/src/yang
 </ncs-package>
 ```
 
-4) Make the package and apply "package re-deploy"
+1) Make the package and apply "package reload"
 
 Note: the action can also be added using the augment statement.
